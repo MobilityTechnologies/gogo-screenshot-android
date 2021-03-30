@@ -16,19 +16,18 @@ GOGO Screenshot Testの特徴は以下の通りです。
 
 - 導入したいプロジェクトのトップレベルに、本リポジトリをGit submoduleとして登録します  
   ```sh
-  git submodule add ...
-  git submodule update --init
+  git submodule add git@github.com:MobilityTechnologies/gogo-screenshot-android.git
   ```
 - 本ライブラリをGradleのモジュールとして登録します
   - `settings.gradle`  
     ```groovy
-    include ...
+    include ':gogo-screenshot-android:library'
     ```
   - `app/build.gradle`  
     ※内部に`Activity`を含んでいるため、`androidTestImplementation`ではなく`debugImplementation`として追加してください  
     ```groovy
     dependencies {
-        debugImplementation project(':uitest:library')
+        debugImplementation project(':gogo-screenshot-android:library')
         ...
     }
     ```
