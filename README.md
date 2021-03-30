@@ -10,7 +10,8 @@ GOGO Screenshot Testの特徴は以下の通りです。
 - [JUnit 5のExtension](https://junit.org/junit5/docs/current/user-guide/#extensions)として提供しています
 - スクリーンショットを撮るテストの書きやすさに注力しています
 - 画面の表示が完了するまで待ち合わせるために必要な[Espresso idling resources](https://developer.android.com/training/testing/espresso/idling-resource)実装のうち、よく使うものを予めセットアップしています
-- 公式に提供されている[FragmentScenario](https://developer.android.com/reference/kotlin/androidx/fragment/app/testing/FragmentScenario)を改善し、Fragment起動時にホストとなるActivityを差し替えられます
+- 公式に提供されている[FragmentScenario](https://developer.android.com/reference/kotlin/androidx/fragment/app/testing/FragmentScenario)を改善し、Fragment起動時にホストとなるActivityを差し替えられるようにした`AppCompatFragmentScenario`を提供しています
+
 
 ## セットアップ
 
@@ -24,7 +25,7 @@ GOGO Screenshot Testの特徴は以下の通りです。
     include ':gogo-screenshot-android:library'
     ```
   - `app/build.gradle`  
-    ※内部に`Activity`を含んでいるため、`androidTestImplementation`ではなく`debugImplementation`として追加してください  
+    ※前述の`AppCompatFragmentScenario`にて利用する`Activity`のデフォルト実装`FragmentTestingActivity`を内部に含んでいます。そのため、`androidTestImplementation`ではなく`debugImplementation`として追加してください  
     ```groovy
     dependencies {
         debugImplementation project(':gogo-screenshot-android:library')
