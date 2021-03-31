@@ -1,4 +1,5 @@
 # GOGO Screenshot Test for Android
+[![](https://jitpack.io/v/MobilityTechnologies/gogo-screenshot-android.svg)](https://jitpack.io/#MobilityTechnologies/gogo-screenshot-android)
 
 ## 概要
 
