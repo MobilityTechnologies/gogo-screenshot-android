@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'maven-publish'
+apply plugin: 'maven'
 
 android {
     defaultConfig {
@@ -50,37 +50,14 @@ dependencies {
     implementation "com.google.android.gms:play-services-maps:$playServicesMapsVersion"
 }
 
-// Because the components are created only during the afterEvaluate phase, you must
-// configure your publications using the afterEvaluate() lifecycle method.
-afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                from components.release
-
-                // group と version は jitpack が自動的に付けてくれる
-                artifactId = 'gogo-screenshot-android'
-                pom {
-                    name = 'GOGO Screenshot Test for Android'
-                    description = 'A screenshot test library for Android'
-                    url = 'https://github.com/MobilityTechnologies/gogo-screenshot-android'
-                    licenses {
-                        license {
-                            name = 'Apache License 2.0'
-                            url = 'https://api.github.com/licenses/apache-2.0'
-                            distribution = 'repo'
-                        }
-                    }
-                    developers {
-                        developer {
-                            id = 'MobilityTechnologies'
-                            name = 'Mobility Technologies Co., Ltd.'
-                        }
-                    }
-                    scm {
-                        connection = 'scm:git://github.com/MobilityTechnologies/gogo-screenshot-android.git'
-                        developerConnection = 'scm:git://github.com/MobilityTechnologies/gogo-screenshot-android.git'
-                        url = 'git://github.com/MobilityTechnologies/gogo-screenshot-android.git'
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            pom.project {
+                name = 'GOGO Screenshot Test for Android'
+                developers {
+                    developer {
+                        name = 'Mobility Technologies Co., Ltd.'
                     }
                 }
             }
