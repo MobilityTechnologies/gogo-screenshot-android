@@ -38,6 +38,28 @@ subprojects {
     }
 }
 
+
+plugins {
+    id "org.jlleitschuh.gradle.ktlint" version "10.0.0"
+}
+
+apply plugin: "org.jlleitschuh.gradle.ktlint"
+
+subprojects {
+    apply plugin: "org.jlleitschuh.gradle.ktlint"
+
+    // Optionally configure plugin
+    ktlint {
+        version = "0.41.0" // https://github.com/shyiko/ktlint/blob/master/CHANGELOG.md
+        android = true
+        additionalEditorconfigFile = file(".editorconfig")
+        reporters {
+            reporter "checkstyle"
+        }
+        ignoreFailures = true
+    }
+}
+
 allprojects {
     repositories {
         google()
