@@ -1,0 +1,6 @@
+[*.{kt,kts}]
+max_line_length=150
+indent_size = unset
+continuation_indent_size = unset
+kotlin_imports_layout=idea
+disabled_rules=final-newline,indent,parameter-list-wrapping
