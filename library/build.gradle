@@ -50,6 +50,7 @@ dependencies {
     implementation "com.google.android.gms:play-services-maps:$playServicesMapsVersion"
 }
 
+
 uploadArchives {
     repositories {
         mavenDeployer {
