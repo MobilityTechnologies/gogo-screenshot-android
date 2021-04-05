@@ -62,6 +62,8 @@ abstract class ActivityOrFragmentScenarioPage<IMPL, A : AppCompatActivity, F : F
 
     override fun starting() {
         snapShotCounter.set(1)
+        snapShotPageName = null
+        activityOrFragmentScenario = null
     }
 
     override fun finished() {
