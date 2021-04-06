@@ -57,11 +57,13 @@ abstract class ActivityOrFragmentScenarioPage<IMPL, A : AppCompatActivity, F : F
     /**
      * 同じテストメソッド内で、複数枚のスクリーンショットを撮ったときの連番です。1から始まります。
      */
-    private val snapShotCounter: AtomicInteger = AtomicInteger(1)
+    val snapShotCounter: AtomicInteger = AtomicInteger(1)
     private val snapShot: SnapShot = SnapShot()
 
     override fun starting() {
-        // do nothing
+        snapShotCounter.set(1)
+        snapShotPageName = null
+        activityOrFragmentScenario = null
     }
 
     override fun finished() {
