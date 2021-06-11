@@ -118,6 +118,7 @@ android {
 | `screenshotType`| `ScreenshotType` | - | AndroidJUnitRunnerの起動オプション`screenshotType`と同じです |
 | `rootDirectory` | `File`     | `/sdcard/${applicationId}`| スクリーンショットを保存するディレクトリを指定します |
 | `buildFlavorPathComponent` | `String?` | `null` | プロダクトフレーバーが定義されていて、スクリーンショット保存ディレクトリをフレーバーごとに分けたい場合は、フレーバー名を指定してください |
+| `fileNameCreator` | `SnapShotNameCreator` | `SnapShotName.toFileName()` | 独自にカスタマイズしたスクリーンショットのファイル名規則を指定します。<br>詳細は`SnapShotNameCreator`インターフェイス説明を参照してください |
 
 ## スクリーンショットを撮るテストを書く
 
