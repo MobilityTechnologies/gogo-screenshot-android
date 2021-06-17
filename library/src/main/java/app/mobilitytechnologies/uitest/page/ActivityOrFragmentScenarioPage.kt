@@ -30,7 +30,8 @@ import app.mobilitytechnologies.uitest.extension.UiTestExtension
 import app.mobilitytechnologies.uitest.scenario.ActivityOrFragmentScenario
 import app.mobilitytechnologies.uitest.snapshot.ActivityOrFragmentSnapShotTaker
 import app.mobilitytechnologies.uitest.snapshot.SnapShot
-import app.mobilitytechnologies.uitest.snapshot.SnapShotName
+import app.mobilitytechnologies.uitest.snapshot.SnapShotNameCreator
+import app.mobilitytechnologies.uitest.snapshot.SnapShotOptions
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -59,6 +60,8 @@ abstract class ActivityOrFragmentScenarioPage<IMPL, A : AppCompatActivity, F : F
      */
     val snapShotCounter: AtomicInteger = AtomicInteger(1)
     private val snapShot: SnapShot = SnapShot()
+    private val snapShotNameCreator: SnapShotNameCreator
+        get() = SnapShotOptions.currentSettings.fileNameCreator
 
     override fun starting() {
         snapShotCounter.set(1)
@@ -94,19 +97,21 @@ abstract class ActivityOrFragmentScenarioPage<IMPL, A : AppCompatActivity, F : F
     // ==========================
     override fun captureDisplay(condition: String, optionalDescription: String?, waitUntilIdle: Boolean) {
         if (waitUntilIdle) Espresso.onIdle()
-        val snapShotName = SnapShotName(snapShotPageName!!, condition, snapShotCounter.getAndIncrement(), optionalDescription)
+        val snapShotFileName = snapShotNameCreator.createFileName(
+                snapShotPageName!!, condition, snapShotCounter.getAndIncrement(), optionalDescription)
         checkNotNull(activityOrFragmentScenario).onActivity {
-            snapShot.captureDisplay(snapShotName.toFileName())
+            snapShot.captureDisplay(snapShotFileName)
         }
     }
 
     override fun captureActivityOrFragment(condition: String, optionalDescription: String?, waitUntilIdle: Boolean) {
         if (waitUntilIdle) Espresso.onIdle()
-        val snapShotName = SnapShotName(snapShotPageName!!, condition, snapShotCounter.getAndIncrement(), optionalDescription)
+        val snapShotFileName = snapShotNameCreator.createFileName(
+                snapShotPageName!!, condition, snapShotCounter.getAndIncrement(), optionalDescription)
         checkNotNull(activityOrFragmentScenario).onActivityOrFragment {
             when (it) {
-                is ActivityOrFragment.Activity -> snapShot.capture(it.activity, snapShotName.toFileName())
-                is ActivityOrFragment.Fragment -> snapShot.capture(it.fragment, snapShotName.toFileName())
+                is ActivityOrFragment.Activity -> snapShot.capture(it.activity, snapShotFileName)
+                is ActivityOrFragment.Fragment -> snapShot.capture(it.fragment, snapShotFileName)
             }
         }
     }
@@ -134,12 +139,13 @@ abstract class ActivityOrFragmentScenarioPage<IMPL, A : AppCompatActivity, F : F
                                                     waitUntilIdle: Boolean,
                                                     func: (ActivityOrFragment<out A, out F>) -> View) {
         if (waitUntilIdle) Espresso.onIdle()
-        val snapShotName = SnapShotName(snapShotPageName!!, condition, snapShotCounter.getAndIncrement(), optionalDescription)
+        val snapShotFileName = snapShotNameCreator.createFileName(
+                snapShotPageName!!, condition, snapShotCounter.getAndIncrement(), optionalDescription)
         checkNotNull(activityOrFragmentScenario).onActivityOrFragment {
             val view = func(it)
             when (it) {
-                is ActivityOrFragment.Activity -> snapShot.capture(it.activity, view, snapShotName.toFileName())
-                is ActivityOrFragment.Fragment -> snapShot.capture(it.fragment, view, snapShotName.toFileName())
+                is ActivityOrFragment.Activity -> snapShot.capture(it.activity, view, snapShotFileName)
+                is ActivityOrFragment.Fragment -> snapShot.capture(it.fragment, view, snapShotFileName)
             }
         }
     }

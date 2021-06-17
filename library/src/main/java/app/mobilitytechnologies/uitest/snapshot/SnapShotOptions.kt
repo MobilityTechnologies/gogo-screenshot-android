@@ -20,7 +20,6 @@ import android.os.Environment
 import androidx.test.platform.app.InstrumentationRegistry
 import app.mobilitytechnologies.uitest.snapshot.SnapShotOptions.Companion.DEFAULT_SETTINGS
 import app.mobilitytechnologies.uitest.snapshot.SnapShotOptions.Companion.INSTRUMENTATION_ARGS_KEY_ENCODE_FILE_NAME
-import app.mobilitytechnologies.uitest.snapshot.SnapShotOptions.Companion.currentSettings
 import java.io.File
 
 /**
@@ -81,7 +80,17 @@ data class SnapShotOptions(
          *
          * このプロパティにフレーバー名を指定すると、他のビルドフレーバーで撮ったスクリーンショットが同じディレクトリに混在するのを防ぐことができます。
          */
-        val buildFlavorPathComponent: String? = null
+        val buildFlavorPathComponent: String? = null,
+
+        /**
+         * スクリーンショットのファイル名の命名規則を指定します。
+         * 詳しくは[SnapShotNameCreator]の説明を参照してください。
+         *
+         * デフォルトでは[SnapShotName.toFileName]メソッドが使われます。
+         */
+        val fileNameCreator: SnapShotNameCreator = SnapShotNameCreator { pageName, conditionName, counter, optionalDescription ->
+            SnapShotName(pageName, conditionName, counter, optionalDescription).toFileName()
+        }
 ) {
     companion object {
         const val INSTRUMENTATION_ARGS_KEY_ENCODE_FILE_NAME = "encodeScreenshotFileName"
