@@ -48,9 +48,9 @@ import kotlin.reflect.KClass
  */
 abstract class DialogFragmentPage<IMPL, D : DialogFragment, DH : DialogHostingFragment, HA>(
         uiTestExtension: UiTestExtension<*>,
-        private val dialogFragmentClass: KClass<D>,
+        protected val dialogFragmentClass: KClass<D>,
         @Suppress("UNCHECKED_CAST")
-        private val dialogHostingFragmentClass: KClass<DH> = DialogHostingFragment::class as KClass<DH>,
+        protected val dialogHostingFragmentClass: KClass<DH> = DialogHostingFragment::class as KClass<DH>,
         @Suppress("UNCHECKED_CAST")
         hostActivityClass: KClass<HA> = FragmentTestingActivity::class as KClass<HA>,
         hostActivityIntent: Intent = FragmentTestingActivity.createIntent(ApplicationProvider.getApplicationContext())
@@ -72,7 +72,7 @@ abstract class DialogFragmentPage<IMPL, D : DialogFragment, DH : DialogHostingFr
      * @throws UnsupportedOperationException [dialogHostingFragmentClass]コンストラクタ引数にKotlinで表現できない型が宣言されているとき (おそらく発生することはない)
      * @throws IllegalArgumentException [dialogHostingFragmentClass]コンストタクタのいずれかの引数の型がインターフェイスではないとき
      */
-    fun launchDialogFragmentByCreator(dialogCreator: () -> DialogFragment) {
+    open fun launchDialogFragmentByCreator(dialogCreator: () -> DialogFragment) {
         uiTestExtension.countingIdlingResource.increment()
         if (snapShotPageName == null) {
             snapShotPageName = dialogFragmentClass.java.simpleName
@@ -107,6 +107,19 @@ abstract class DialogFragmentPage<IMPL, D : DialogFragment, DH : DialogHostingFr
     fun getSupportMapFragmentHelperOfDialogFragment(@IdRes mapFragmentId: Int? = null) =
             SupportMapFragmentHelper(uiTestExtension, this::onDialogFragment, mapFragmentId)
 
+
+    fun captureDialogFragment(condition: String, optionalDescription: String? = null, waitUntilIdle: Boolean = true) {
+        if (waitUntilIdle) {
+            Espresso.onIdle()
+        }
+        val snapShotFileName = snapShotNameCreator.createFileName(
+                snapShotPageName!!, condition, snapShotCounter.getAndIncrement(), optionalDescription)
+        onDialogFragment {
+            val view = it.requireDialog().window!!.decorView.rootView
+            snapShot.capture(it, view, snapShotFileName)
+        }
+    }
+
     /**
      * 引数[dialogHostingFragmentClass]をインスタンス化します。
      * それぞれのリスナインターフェースを空実装したオブジェクトをコンストラクタの引数に指定してインスタンス化します。
@@ -115,7 +128,7 @@ abstract class DialogFragmentPage<IMPL, D : DialogFragment, DH : DialogHostingFr
      * @throws UnsupportedOperationException [dialogHostingFragmentClass]コンストラクタ引数にKotlinで表現できない型が宣言されているとき (おそらく発生することはない)
      * @throws IllegalArgumentException [dialogHostingFragmentClass]コンストタクタのいずれかの引数の型がインターフェイスではないとき
      */
-    private fun <DH : DialogHostingFragment> newDialogHostingFragment(dialogHostingFragmentClass: KClass<DH>): DH {
+    fun <DH : DialogHostingFragment> newDialogHostingFragment(dialogHostingFragmentClass: KClass<DH>): DH {
         // 厳密にはこれでprimary constructorが取れる保証はない。
         // とはいえ、テストコード上で宣言するDialogHostingFragmentのサブクラスで変なコンストラクタを宣言するケースも考えられないので、これで妥協する。
         // 厳密にやるなら、kotlin-reflectで定義されている`KClass<T>.primaryConstructor`を使うべき。
