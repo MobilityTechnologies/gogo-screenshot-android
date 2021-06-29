@@ -24,6 +24,8 @@ import android.os.Handler
 import android.util.Log
 import android.view.PixelCopy
 import android.view.View
+import android.view.Window
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
@@ -62,22 +64,30 @@ class SnapShot {
         capture(fragment.requireActivity(), view, name)
     }
 
+    fun capture(dialogFragment: DialogFragment, view: View, name: String) {
+        captureView(view, dialogFragment.requireDialog().window) {
+            saveBitMap(it, name)
+        }
+    }
+
     fun capture(activity: Activity, view: View, name: String) {
         captureView(view, activity) {
             saveBitMap(it, name)
         }
     }
 
-    private fun captureView(view: View, activity: Activity, callback: (Bitmap) -> Unit) {
+    private fun captureView(view: View, activity: Activity, callback: (Bitmap) -> Unit) = captureView(view, activity.window, callback)
 
-        activity.window?.let { window ->
+    private fun captureView(view: View, window: Window?, callback: (Bitmap) -> Unit) {
+
+        window?.let { _window ->
             val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
 
             val viewLocation = IntArray(2)
             view.getLocationInWindow(viewLocation)
 
             PixelCopy.request(
-                    window,
+                    _window,
                     Rect(
                             viewLocation[0],
                             viewLocation[1],
