@@ -37,6 +37,10 @@ import kotlin.reflect.KClass
  *
  * 利用例はREADME.mdを参照してください。
  *
+ * [captureActivityOrFragment]メソッドではダイアログの表示内容をキャプチャできません。用途に応じて次のいずれかのメソッド使ってください。
+ * - 画面全体(スクリーン全体)をキャプチャしたいとき: [captureDisplay]
+ * - ダイアログ内に表示されている内容だけをキャプチャしたいとき: [captureDialogFragment]
+ *
  * @param uiTestExtension `RegisterExtension`で登録したUiTestExtensionのインスタンスを指定します。
  * @param dialogFragmentClass 起動したいダイアログフラグメントのクラスを指定します。
  * @param dialogHostingFragmentClass ダイアログフラグメントをホストするフラグメントのクラスを指定します。
@@ -107,7 +111,15 @@ abstract class DialogFragmentPage<IMPL, D : DialogFragment, DH : DialogHostingFr
     fun getSupportMapFragmentHelperOfDialogFragment(@IdRes mapFragmentId: Int? = null) =
             SupportMapFragmentHelper(uiTestExtension, this::onDialogFragment, mapFragmentId)
 
-
+    /**
+     * このダイアログ内に表示されている内容全体(画面全体ではない)をキャプチャします。
+     * 画面全体をキャプチャしたいときは[captureDisplay]を使ってください。
+     *
+     * @param condition キャプチャ時点の画面の状態を表す文字列を指定します。結果レポートに表示されます。
+     * @param optionalDescription その他、結果レポートに表示させたい補足事項があれば、それを指定します。
+     *   `null`以外が指定された場合は結果レポートに表示されます。
+     * @param waitUntilIdle キャプチャする前にアイドル状態になるまで待つ場合には`true`を、そうでない場合は`false`を指定します。
+     */
     fun captureDialogFragment(condition: String, optionalDescription: String? = null, waitUntilIdle: Boolean = true) {
         if (waitUntilIdle) {
             Espresso.onIdle()
@@ -128,6 +140,8 @@ abstract class DialogFragmentPage<IMPL, D : DialogFragment, DH : DialogHostingFr
      * @throws UnsupportedOperationException [dialogHostingFragmentClass]コンストラクタ引数にKotlinで表現できない型が宣言されているとき (おそらく発生することはない)
      * @throws IllegalArgumentException [dialogHostingFragmentClass]コンストタクタのいずれかの引数の型がインターフェイスではないとき
      */
+    // `constructors`, `parameters`, `type`, `call`いずれもkotlin-reflect.jarが無くても呼べるのだが、何故か警告が出てしまうので抑止。
+    @Suppress("NO_REFLECTION_IN_CLASS_PATH")
     fun <DH : DialogHostingFragment> newDialogHostingFragment(dialogHostingFragmentClass: KClass<DH>): DH {
         // 厳密にはこれでprimary constructorが取れる保証はない。
         // とはいえ、テストコード上で宣言するDialogHostingFragmentのサブクラスで変なコンストラクタを宣言するケースも考えられないので、これで妥協する。
