@@ -52,9 +52,9 @@ import kotlin.reflect.KClass
  */
 abstract class DialogFragmentPage<IMPL, D : DialogFragment, DH : DialogHostingFragment, HA>(
         uiTestExtension: UiTestExtension<*>,
-        protected val dialogFragmentClass: KClass<D>,
+        val dialogFragmentClass: KClass<D>,
         @Suppress("UNCHECKED_CAST")
-        protected val dialogHostingFragmentClass: KClass<DH> = DialogHostingFragment::class as KClass<DH>,
+        val dialogHostingFragmentClass: KClass<DH> = DialogHostingFragment::class as KClass<DH>,
         @Suppress("UNCHECKED_CAST")
         hostActivityClass: KClass<HA> = FragmentTestingActivity::class as KClass<HA>,
         hostActivityIntent: Intent = FragmentTestingActivity.createIntent(ApplicationProvider.getApplicationContext())
