@@ -127,8 +127,7 @@ abstract class DialogFragmentPage<IMPL, D : DialogFragment, DH : DialogHostingFr
         val snapShotFileName = snapShotNameCreator.createFileName(
                 snapShotPageName!!, condition, snapShotCounter.getAndIncrement(), optionalDescription)
         onDialogFragment {
-            val view = it.requireDialog().window!!.decorView.rootView
-            snapShot.capture(it, view, snapShotFileName)
+            snapShot.capture(it, snapShotFileName)
         }
     }
 
