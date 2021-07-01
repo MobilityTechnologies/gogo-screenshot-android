@@ -60,19 +60,23 @@ class SnapShot {
         capture(fragment.requireActivity(), fragment.requireView(), name)
     }
 
+    fun capture(dialogFragment: DialogFragment, name: String) {
+        capture(dialogFragment, dialogFragment.requireDialog().window!!.decorView.rootView, name)
+    }
+
     fun capture(fragment: Fragment, view: View, name: String) {
         capture(fragment.requireActivity(), view, name)
     }
 
     fun capture(dialogFragment: DialogFragment, view: View, name: String) {
         captureView(view, dialogFragment.requireDialog().window) {
-            saveBitMap(it, name)
+            saveBitmap(it, name)
         }
     }
 
     fun capture(activity: Activity, view: View, name: String) {
         captureView(view, activity) {
-            saveBitMap(it, name)
+            saveBitmap(it, name)
         }
     }
 
@@ -108,7 +112,7 @@ class SnapShot {
         }
     }
 
-    private fun saveBitMap(bitmap: Bitmap, name: String) {
+    fun saveBitmap(bitmap: Bitmap, name: String) {
 
         val imageFile = captureFile(name)
         var out: BufferedOutputStream? = null
