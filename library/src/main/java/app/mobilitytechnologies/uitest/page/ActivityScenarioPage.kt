@@ -44,8 +44,8 @@ import kotlin.reflect.KClass
  */
 abstract class ActivityScenarioPage<IMPL, A : AppCompatActivity>(
         uiTestExtension: UiTestExtension<*>,
-        private val activityClass: KClass<A>,
-        @IdRes private val viewIdSearchingNavController: Int? = null
+        val activityClass: KClass<A>,
+        @IdRes val viewIdSearchingNavController: Int? = null
 ) : ActivityOrFragmentScenarioPage<IMPL, A, Nothing>(uiTestExtension) {
 
     val scenario: ActivityScenario<A>

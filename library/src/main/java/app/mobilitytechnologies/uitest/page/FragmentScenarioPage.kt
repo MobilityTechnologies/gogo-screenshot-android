@@ -52,10 +52,10 @@ import kotlin.reflect.KClass
  */
 abstract class FragmentScenarioPage<IMPL, F : Fragment, HA>(
         uiTestExtension: UiTestExtension<*>,
-        private val fragmentClass: KClass<F>,
+        val fragmentClass: KClass<F>,
         @Suppress("UNCHECKED_CAST")
-        private val hostActivityClass: KClass<HA> = FragmentTestingActivity::class as KClass<HA>,
-        private val hostActivityIntent: Intent = FragmentTestingActivity.createIntent(ApplicationProvider.getApplicationContext()),
+        val hostActivityClass: KClass<HA> = FragmentTestingActivity::class as KClass<HA>,
+        val hostActivityIntent: Intent = FragmentTestingActivity.createIntent(ApplicationProvider.getApplicationContext()),
         @IdRes val contentLayoutId: Int? = null
 ) : ActivityOrFragmentScenarioPage<IMPL, HA, F>(uiTestExtension)
         where HA : AppCompatActivity, HA : TestingFragmentHost {

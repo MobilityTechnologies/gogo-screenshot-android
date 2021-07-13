@@ -24,6 +24,8 @@ import android.os.Handler
 import android.util.Log
 import android.view.PixelCopy
 import android.view.View
+import android.view.Window
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
@@ -58,26 +60,38 @@ class SnapShot {
         capture(fragment.requireActivity(), fragment.requireView(), name)
     }
 
+    fun capture(dialogFragment: DialogFragment, name: String) {
+        capture(dialogFragment, dialogFragment.requireDialog().window!!.decorView.rootView, name)
+    }
+
     fun capture(fragment: Fragment, view: View, name: String) {
         capture(fragment.requireActivity(), view, name)
     }
 
-    fun capture(activity: Activity, view: View, name: String) {
-        captureView(view, activity) {
-            saveBitMap(it, name)
+    fun capture(dialogFragment: DialogFragment, view: View, name: String) {
+        captureView(view, dialogFragment.requireDialog().window) {
+            saveBitmap(it, name)
         }
     }
 
-    private fun captureView(view: View, activity: Activity, callback: (Bitmap) -> Unit) {
+    fun capture(activity: Activity, view: View, name: String) {
+        captureView(view, activity) {
+            saveBitmap(it, name)
+        }
+    }
 
-        activity.window?.let { window ->
+    private fun captureView(view: View, activity: Activity, callback: (Bitmap) -> Unit) = captureView(view, activity.window, callback)
+
+    private fun captureView(view: View, window: Window?, callback: (Bitmap) -> Unit) {
+
+        window?.let { _window ->
             val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
 
             val viewLocation = IntArray(2)
             view.getLocationInWindow(viewLocation)
 
             PixelCopy.request(
-                    window,
+                    _window,
                     Rect(
                             viewLocation[0],
                             viewLocation[1],
@@ -98,7 +112,7 @@ class SnapShot {
         }
     }
 
-    private fun saveBitMap(bitmap: Bitmap, name: String) {
+    fun saveBitmap(bitmap: Bitmap, name: String) {
 
         val imageFile = captureFile(name)
         var out: BufferedOutputStream? = null
