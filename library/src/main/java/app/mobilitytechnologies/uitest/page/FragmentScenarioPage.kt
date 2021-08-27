@@ -23,7 +23,6 @@ import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
-import androidx.fragment.app.testing.FragmentScenario
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.test.core.app.ApplicationProvider
@@ -39,7 +38,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import kotlin.reflect.KClass
 
 /**
- * [androidx.fragment.app.testing.FragmentScenario]を使って画面を起動するPage実装です。
+ * [AppCompatFragmentScenario]を使って画面を起動するPage実装です。
  * @param IMPL 実装クラスの型
  * @param F FragmentScenarioを使って起動するFragmentの型
  * @param HA 起動するFragmentをホストするActivityの型
