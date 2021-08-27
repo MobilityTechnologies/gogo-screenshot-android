@@ -41,8 +41,7 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
     implementation "androidx.test:rules:$androidxTestVersion"
-    //noinspection FragmentGradleConfiguration
-    implementation "androidx.fragment:fragment-testing:$fragmentVersion"
+    implementation "androidx.test:core-ktx:$androidxTestVersion"
     implementation "androidx.test.uiautomator:uiautomator:$uiautomatorVersion"
     implementation "androidx.test.espresso:espresso-core:$espressoVersion"
     implementation "androidx.test.espresso:espresso-contrib:$espressoVersion"
