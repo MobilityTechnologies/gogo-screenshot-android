@@ -13,6 +13,5 @@ class CustomAndroidJUnitRunner : AndroidJUnitRunner() {
     override fun finish(resultCode: Int, results: Bundle?) {
         SnapShot.zipAll()
         super.finish(resultCode, results)
-        UiTestDeveloperSettings.onInstrumentationFinished()
     }
 }

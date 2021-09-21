@@ -16,7 +16,6 @@
 
 package app.mobilitytechnologies.uitest
 
-import androidx.test.platform.app.InstrumentationRegistry
 import app.mobilitytechnologies.uitest.snapshot.SystemUiDemoMode
 import app.mobilitytechnologies.uitest.utils.awaitExecuteShellCommand
 
@@ -36,9 +35,5 @@ object UiTestDeveloperSettings {
     // テスト実行終了の直後に実行する
     fun onTestRunFinished() {
         systemUiDemoMode.clear()
-    }
-
-    // Instrumentation$finishのあとに実行する
-    fun onInstrumentationFinished() {
     }
 }
