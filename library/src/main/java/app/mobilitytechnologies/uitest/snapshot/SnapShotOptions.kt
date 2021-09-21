@@ -46,10 +46,10 @@ import java.io.File
 data class SnapShotOptions(
         /**
          * スクリーンショットを保存するディレクトリのルートを指定します。
-         * デフォルト値は `/sdcard/{アプリケーションID}/` です。
+         * デフォルト値は `Context#getExternalFilesDir(Environment.DIRECTORY_PICTURES)` です。
          */
-        val rootDirectory: File = ApplicationProvider.getApplicationContext<Application>()
-                .getExternalFilesDir(Environment.DIRECTORY_PICTURES) ?: throw Exception("can not found external files dir"),
+        val rootDirectory: File = ApplicationProvider.getApplicationContext<Application>().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                ?: throw IllegalStateException("Context#getExternalFilesDir(Environment.DIRECTORY_PICTURES) returned null. Please consider changing the default SnapShotOptions#rootDirectory."),
         /**
          * スクリーンショットのファイル名のうち、日本語が指定できる部分のBase64エンコード要否を指定します。
          * trueを指定するとBase64エンコードされます。falseにするとBase64エンコードされません。
