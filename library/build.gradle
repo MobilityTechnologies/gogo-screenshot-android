@@ -64,6 +64,7 @@ dependencies {
 
     androidTestImplementation "de.mannodermaus.junit5:android-test-core:$androidJunit5Version"
     androidTestRuntimeOnly "de.mannodermaus.junit5:android-test-runner:$androidJunit5Version"
+    kaptAndroidTest "androidx.databinding:databinding-compiler:4.1.2"
 }
 
 // Because the components are created only during the afterEvaluate phase, you must
