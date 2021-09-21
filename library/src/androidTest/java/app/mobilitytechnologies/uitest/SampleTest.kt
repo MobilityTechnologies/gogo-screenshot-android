@@ -1,5 +1,10 @@
 package app.mobilitytechnologies.uitest
 
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import app.mobilitytechnologies.uitest.extension.UiTestExtension
 import app.mobilitytechnologies.uitest.page.SimpleFragmentPage
@@ -19,5 +24,11 @@ class SampleTest {
         uiTestExtension.page.captureActivityOrFragment("TestFragment")
     }
 
-    class TestFragment() : Fragment()
+    class TestFragment : Fragment() {
+        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+            val textView =  TextView(requireContext())
+            textView.text = "TestFragment"
+            return textView
+        }
+    }
 }
