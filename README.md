@@ -63,9 +63,8 @@ GOGO Screenshot Testの特徴は以下の通りです。
           super.finish(resultCode, results)
       }
   }
-
   ```
-  - ★1 **(必須)** `onCreate()`メソッド内に処理を書きます。`UiTestRunListener.appendListenerArgument(arguments)`の戻り値を`super.onCreate()`の引数に渡してください
+  - ★1 **(任意)** `onCreate()`メソッド内に処理を書きます。`UiTestRunListener.appendListenerArgument(arguments)`の戻り値を`super.onCreate()`の引数に渡してください
   - ★2: **(任意)** `onStart()`メソッド内に処理を書きます。`SnapShotOptions`を使って起動オプションを変更したい場合に、`super.onStart()`の直前に書いてください。
     指定できる内容は後述します。
   - ★3: **(任意)** `finish()`メソッド内に処理を書きます。保存したスクリーンショット画像をzipファイルにまとめたい場合に、`super.finish()`の直前に書いてください
@@ -77,8 +76,17 @@ GOGO Screenshot Testの特徴は以下の通りです。
   }
   ```
 
-★1は、 テスト実行中だけ以下の設定を有効ににするためのものです。
-- ステータスバーの内容を固定化するためにシステムUIデモモードを有効化します
+★1は、 ステータスバーの内容を固定化するためにシステムUIデモモードをテスト中だけ有効化するために必要な設定です。システムUIデモモードを有効化すると、スクリーンショットにステータスバーが含まれる場合も、差分の少ないスクリーンショットが取得できます。
+★1を設定する場合は、あわせてテスト時のビルドで使用されるAndroidManifest.xml(例: `debug/AndroidManifest.xml`)に、`android.permission.DUMP`のパーミッションを設定してください。
+
+```xml
+<manifest>
+     ..
+    <uses-permission
+        android:name="android.permission.DUMP"
+        tools:ignore="ProtectedPermissions" />
+</manifest>
+```
 
 ## テストを書く場所
 
