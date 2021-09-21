@@ -2,12 +2,16 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'maven-publish'
+apply plugin: "de.mannodermaus.android-junit5"
 
 android {
     defaultConfig {
         minSdkVersion 26
         targetSdkVersion 30
         compileSdkVersion 30
+
+        testInstrumentationRunner "app.mobilitytechnologies.uitest.CustomAndroidJUnitRunner"
+        testInstrumentationRunnerArgument "runnerBuilder", "de.mannodermaus.junit5.AndroidJUnit5Builder"
     }
 
     kotlinOptions {
@@ -26,6 +30,11 @@ android {
     buildFeatures {
         dataBinding = true
     }
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE.md'
+        exclude 'META-INF/LICENSE-notice.md'
+    }
 }
 
 dependencies {
@@ -38,6 +47,7 @@ dependencies {
     def guavaAndroidVersion = '28.1-android'
     def junit5Version = '5.7.1'
     def playServicesMapsVersion = '17.0.0'
+    def androidJunit5Version = '1.2.2'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
     implementation "androidx.test:rules:$androidxTestVersion"
@@ -51,6 +61,9 @@ dependencies {
     implementation "com.google.guava:guava:$guavaAndroidVersion"
     implementation "org.junit.jupiter:junit-jupiter-api:$junit5Version"
     implementation "com.google.android.gms:play-services-maps:$playServicesMapsVersion"
+
+    androidTestImplementation "de.mannodermaus.junit5:android-test-core:$androidJunit5Version"
+    androidTestRuntimeOnly "de.mannodermaus.junit5:android-test-runner:$androidJunit5Version"
 }
 
 // Because the components are created only during the afterEvaluate phase, you must
