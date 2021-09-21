@@ -21,7 +21,7 @@ class SimpleFragmentTest {
     @Test
     fun captureTestFragment() {
         uiTestExtension.page.launchFragmentSimply()
-        uiTestExtension.page.captureActivityOrFragment("TestFragment")
+        uiTestExtension.page.captureDisplay("TestFragment")
     }
 
     class TestFragment : Fragment() {

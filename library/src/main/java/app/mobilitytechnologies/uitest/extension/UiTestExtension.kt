@@ -17,6 +17,9 @@
 package app.mobilitytechnologies.uitest.extension
 
 import android.Manifest
+import android.app.Application
+import android.content.pm.PackageManager
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.IdlingPolicies
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.idling.CountingIdlingResource
@@ -36,6 +39,7 @@ import kotlinx.coroutines.withContext
 import org.junit.jupiter.api.extension.AfterEachCallback
 import org.junit.jupiter.api.extension.BeforeEachCallback
 import org.junit.jupiter.api.extension.ExtensionContext
+
 
 /**
  * UI Test用のJUnit 5 Extensionです。
@@ -67,12 +71,11 @@ class UiTestExtension<P : Page<P>>(initializer: (thisRef: UiTestExtension<*>) ->
     /** IdlingResourceを実装したCoroutineDispatcherです。*/
     val idlingCoroutineDispatcher: CoroutineDispatcher by lazy { idlingThreadPoolExecutor.asCoroutineDispatcher() }
 
-    private val dependentExtensions: List<Any> = listOf(
-            TaskExecutorWithIdlingResourceExtension(),
-            GrantPermissionExtension.grant(Manifest.permission.DUMP))
+    lateinit var dependentExtensions : List<Any>
 
     override fun beforeEach(context: ExtensionContext?) {
 
+        dependentExtensions = dependentExtensions()
         dependentExtensions.filterIsInstance<BeforeEachCallback>().forEach {
             it.beforeEach(context)
         }
@@ -113,4 +116,30 @@ class UiTestExtension<P : Page<P>>(initializer: (thisRef: UiTestExtension<*>) ->
      * [block]の処理が完了するまでEspressoの処理を待ち合わせるコルーチンビルダーです。
      */
     suspend inline fun <T> withIdlingCoroutineContext(noinline block: suspend CoroutineScope.() -> T) = withContext(idlingCoroutineDispatcher, block)
+
+    /**
+     * テスト時に権限を付与したいパーミションの一覧。
+     */
+    val permissionsForTesting = mutableListOf(Manifest.permission.DUMP, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+    /**
+     * テスト時に権限の付与をリクエストするパーミッションを返します。AndroidManifestにuses-permissionの指定があるものだけリクエストします。
+     */
+    private fun requestedPermissionsForTesting(): List<String> {
+        val targetContext = ApplicationProvider.getApplicationContext<Application>()
+        val packageInfo = targetContext.packageManager.getPackageInfo(targetContext.packageName, PackageManager.GET_PERMISSIONS)
+        val requestedPermissionsForTesting = permissionsForTesting.filter {
+            packageInfo.requestedPermissions.contains(it)
+        }
+        return requestedPermissionsForTesting
+    }
+
+    private fun dependentExtensions(): List<Any> {
+        val extensions = mutableListOf<Any>(TaskExecutorWithIdlingResourceExtension())
+        val requestedPermissionsForTesting = requestedPermissionsForTesting()
+        if (requestedPermissionsForTesting.isNotEmpty()) {
+            extensions.add(GrantPermissionExtension.grant(*requestedPermissionsForTesting.toTypedArray()))
+        }
+        return extensions
+    }
 }
