@@ -25,6 +25,10 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import app.mobilitytechnologies.uitest.espresso.DataBindingIdlingResource
 import app.mobilitytechnologies.uitest.page.Page
+import java.util.UUID
+import java.util.concurrent.LinkedBlockingDeque
+import java.util.concurrent.ThreadPoolExecutor
+import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
@@ -32,10 +36,6 @@ import kotlinx.coroutines.withContext
 import org.junit.jupiter.api.extension.AfterEachCallback
 import org.junit.jupiter.api.extension.BeforeEachCallback
 import org.junit.jupiter.api.extension.ExtensionContext
-import java.util.UUID
-import java.util.concurrent.LinkedBlockingDeque
-import java.util.concurrent.ThreadPoolExecutor
-import java.util.concurrent.TimeUnit
 
 /**
  * UI Test用のJUnit 5 Extensionです。
@@ -69,9 +69,7 @@ class UiTestExtension<P : Page<P>>(initializer: (thisRef: UiTestExtension<*>) ->
 
     private val dependentExtensions: List<Any> = listOf(
             TaskExecutorWithIdlingResourceExtension(),
-            GrantPermissionExtension.grant(
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.DUMP))
+            GrantPermissionExtension.grant(Manifest.permission.DUMP))
 
     override fun beforeEach(context: ExtensionContext?) {
 

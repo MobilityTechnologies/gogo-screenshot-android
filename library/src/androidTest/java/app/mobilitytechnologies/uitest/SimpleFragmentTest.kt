@@ -11,7 +11,7 @@ import app.mobilitytechnologies.uitest.page.SimpleFragmentPage
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 
-class SampleTest {
+class SimpleFragmentTest {
 
     @JvmField
     @RegisterExtension
