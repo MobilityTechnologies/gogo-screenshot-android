@@ -23,7 +23,6 @@ import app.mobilitytechnologies.uitest.utils.awaitExecuteShellCommand
 // UIテスト用のadbや開発者optionを用いた設定をInstrumentationテストのライフサイクルにあわせて実行する
 object UiTestDeveloperSettings {
 
-    private val packageName = InstrumentationRegistry.getInstrumentation().targetContext.packageName
     private val systemUiDemoMode = SystemUiDemoMode()
 
     // テスト実行開始の直前のタイミングに実行する
@@ -32,12 +31,6 @@ object UiTestDeveloperSettings {
         // https://android.googlesource.com/platform/frameworks/base/+/master/packages/SystemUI/docs/demo_mode.md
         awaitExecuteShellCommand("settings put global sysui_demo_allowed 1")
         systemUiDemoMode.display()
-
-        // Android11以上で/sdcard配下にスクリーンショット画像を保存できるようにMANAGE_EXTERNAL_STORAGE権限を付与する
-        // https://developer.android.com/training/data-storage/manage-all-files#enable-manage-external-storage-for-testing
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
-            awaitExecuteShellCommand("appops set --uid $packageName MANAGE_EXTERNAL_STORAGE allow")
-        }
     }
 
     // テスト実行終了の直後に実行する
@@ -47,8 +40,5 @@ object UiTestDeveloperSettings {
 
     // Instrumentation$finishのあとに実行する
     fun onInstrumentationFinished() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
-            awaitExecuteShellCommand("appops set --uid $packageName MANAGE_EXTERNAL_STORAGE deny")
-        }
     }
 }
