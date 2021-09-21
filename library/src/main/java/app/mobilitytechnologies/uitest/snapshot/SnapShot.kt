@@ -30,6 +30,7 @@ import androidx.fragment.app.Fragment
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
+import app.mobilitytechnologies.uitest.logTagPrefix
 import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -143,7 +144,7 @@ class SnapShot {
     }
 
     companion object {
-        const val TAG = "SnapShot"
+        const val TAG = "${logTagPrefix} SnapShot"
         const val PARENT_DIR_NAME = "screenshots"
 
         val baseDir = File(SnapShotOptions.currentSettings.rootDirectory, PARENT_DIR_NAME)

@@ -16,6 +16,11 @@
 
 package app.mobilitytechnologies.uitest
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.util.Log
+import androidx.core.content.ContextCompat
+import androidx.test.core.app.ApplicationProvider
 import app.mobilitytechnologies.uitest.snapshot.SystemUiDemoMode
 import app.mobilitytechnologies.uitest.utils.awaitExecuteShellCommand
 
@@ -24,12 +29,21 @@ object UiTestDeveloperSettings {
 
     private val systemUiDemoMode = SystemUiDemoMode()
 
+    private const val TAG : String = "${logTagPrefix} UiTestDeveloperSettings"
+
     // テスト実行開始の直前のタイミングに実行する
     fun onTestRunStarted() {
-        // ステータスバーの内容を固定化するためにシステムUIデモモードを有効化する
-        // https://android.googlesource.com/platform/frameworks/base/+/master/packages/SystemUI/docs/demo_mode.md
-        awaitExecuteShellCommand("settings put global sysui_demo_allowed 1")
-        systemUiDemoMode.display()
+
+        val checkDumpPermissionResult = ContextCompat.checkSelfPermission(ApplicationProvider.getApplicationContext(), Manifest.permission.DUMP)
+
+        if(checkDumpPermissionResult == PackageManager.PERMISSION_GRANTED) {
+            // ステータスバーの内容を固定化するためにシステムUIデモモードを有効化する
+            // https://android.googlesource.com/platform/frameworks/base/+/master/packages/SystemUI/docs/demo_mode.md
+            awaitExecuteShellCommand("settings put global sysui_demo_allowed 1")
+            systemUiDemoMode.display()
+        } else {
+            Log.e(TAG, "Manifest.permission.DUMP is not granted. Please add uses-permission tag to your AndroidManifest.xml for testing.")
+        }
     }
 
     // テスト実行終了の直後に実行する
