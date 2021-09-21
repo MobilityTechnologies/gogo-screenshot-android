@@ -61,8 +61,6 @@ GOGO Screenshot Testの特徴は以下の通りです。
           // ★3
           SnapShot.zipAll()
           super.finish(resultCode, results)
-          // ★4
-          UiTestDeveloperSettings.onInstrumentationFinished()
       }
   }
 
@@ -70,8 +68,7 @@ GOGO Screenshot Testの特徴は以下の通りです。
   - ★1 **(必須)** `onCreate()`メソッド内に処理を書きます。`UiTestRunListener.appendListenerArgument(arguments)`の戻り値を`super.onCreate()`の引数に渡してください
   - ★2: **(任意)** `onStart()`メソッド内に処理を書きます。`SnapShotOptions`を使って起動オプションを変更したい場合に、`super.onStart()`の直前に書いてください。
     指定できる内容は後述します。
-  - ★3: **(任意)** `finish()`メソッド内に処理を書きます。`/sdcard` に保存したスクリーンショット画像をzipファイルにまとめたい場合に、`super.finish()`の直前に書いてください
-  - ★4 **(必須)** `finish()`メソッド内に処理を書きます。`super.finish()`呼び出しよりも後に書いてください
+  - ★3: **(任意)** `finish()`メソッド内に処理を書きます。保存したスクリーンショット画像をzipファイルにまとめたい場合に、`super.finish()`の直前に書いてください
 - 定義した`AndroidJUnitRunner`のサブクラス名を、build.gradleの`android.testInstrumentationRunner`に指定します。  
   ```groovy
   android {
@@ -80,9 +77,8 @@ GOGO Screenshot Testの特徴は以下の通りです。
   }
   ```
 
-★1と★4は、 テスト実行中だけ以下の設定を有効ににするためのものです。
+★1は、 テスト実行中だけ以下の設定を有効ににするためのものです。
 - ステータスバーの内容を固定化するためにシステムUIデモモードを有効化します
-- Android 11以上で`/sdcard`配下にスクリーンショット画像を保存できるようにMANAGE_EXTERNAL_STORAGE権限を付与します
 
 ## テストを書く場所
 
@@ -116,7 +112,7 @@ android {
 |:------------:|:----------:|:------------:|:----|
 | `encodeFileName` | `Boolean` | - | AndroidJUnitRunnerの起動オプション`encodeScreenshotFileName`と同じです |
 | `screenshotType`| `ScreenshotType` | - | AndroidJUnitRunnerの起動オプション`screenshotType`と同じです |
-| `rootDirectory` | `File`     | `/sdcard/${applicationId}`| スクリーンショットを保存するディレクトリを指定します |
+| `rootDirectory` | `File`     | `/sdcard/Android/data/${applicationId}/files/Pictures`| スクリーンショットを保存するディレクトリを指定します |
 | `buildFlavorPathComponent` | `String?` | `null` | プロダクトフレーバーが定義されていて、スクリーンショット保存ディレクトリをフレーバーごとに分けたい場合は、フレーバー名を指定してください |
 | `fileNameCreator` | `SnapShotNameCreator` | `SnapShotName.toFileName()` | 独自にカスタマイズしたスクリーンショットのファイル名規則を指定します。<br>詳細は`SnapShotNameCreator`インターフェイス説明を参照してください |
 
@@ -368,9 +364,9 @@ uiTestExtension.page.captureDisplay("画面の状態", "補足の説明")
 
 撮影したスクリーンショットはデフォルトで次のパスに保存されます。
 
-補足の説明がない場合: `/sdcard/アプリケーションID/screenshots/画面のクラス名/画面の状態-スクリーンショット取得順を表す番号.PNG`
+補足の説明がない場合: `/ルートディレクトリ/screenshots/画面のクラス名/画面の状態-スクリーンショット取得順を表す番号.PNG`
 
-補足の説明がある場合: `/sdcard/アプリケーションID/screenshots/画面のクラス名/画面の状態-スクリーンショット取得順を表す番号-補足の説明.PNG`
+補足の説明がある場合: `/ルートディレクトリ/screenshots/画面のクラス名/画面の状態-スクリーンショット取得順を表す番号-補足の説明.PNG`
 
 パスを構成する要素の詳細は次のとおりです。
 
@@ -378,7 +374,7 @@ uiTestExtension.page.captureDisplay("画面の状態", "補足の説明")
 
 |要素|デフォルト値|  |
 |:------------|:----------|:------------|
-| ルートディレクトリ | sdcard/アプリケーションID | スクリーンショット保存先のルートディレクトリ<br>`SnapShotOptions#rootDirectory`で変更可|
+| ルートディレクトリ | `/sdcard/Android/data/${applicationId}/files/Pictures` | スクリーンショット保存先のルートディレクトリ<br>`SnapShotOptions#rootDirectory`で変更可|
 | 画像保存先ディレクトリ| screenshots | `SnapShotOptions#buildFlavorPathComponent`でscreenshots/BuildFlavorに変更可  |
 | 画面のクラス名 | Pageで指定された画面のクラス名 | `UiTestExtension#page.snapShotPageName`で変更可|
 
