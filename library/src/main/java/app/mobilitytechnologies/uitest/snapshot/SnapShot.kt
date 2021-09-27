@@ -144,7 +144,7 @@ class SnapShot {
     }
 
     companion object {
-        const val TAG = "${logTagPrefix} SnapShot"
+        const val TAG = "$logTagPrefix SnapShot"
         const val PARENT_DIR_NAME = "screenshots"
 
         val baseDir = File(SnapShotOptions.currentSettings.rootDirectory, PARENT_DIR_NAME)

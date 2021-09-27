@@ -26,7 +26,7 @@ class SimpleFragmentTest {
 
     class TestFragment : Fragment() {
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-            val textView =  TextView(requireContext())
+            val textView = TextView(requireContext())
             textView.text = "TestFragment"
             return textView
         }

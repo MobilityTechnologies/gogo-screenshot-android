@@ -71,7 +71,7 @@ class UiTestExtension<P : Page<P>>(initializer: (thisRef: UiTestExtension<*>) ->
     /** IdlingResourceを実装したCoroutineDispatcherです。*/
     val idlingCoroutineDispatcher: CoroutineDispatcher by lazy { idlingThreadPoolExecutor.asCoroutineDispatcher() }
 
-    lateinit var dependentExtensions : List<Any>
+    lateinit var dependentExtensions: List<Any>
 
     override fun beforeEach(context: ExtensionContext?) {
 

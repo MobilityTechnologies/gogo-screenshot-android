@@ -27,7 +27,7 @@ data class SnapShotName(
         val optionalDescription: String? = null
 ) {
     companion object {
-        const val TAG = "${logTagPrefix} SnapShotName"
+        const val TAG = "$logTagPrefix SnapShotName"
     }
 
     private val base64Flag = Base64.URL_SAFE or Base64.NO_PADDING or Base64.NO_WRAP
