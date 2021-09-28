@@ -120,7 +120,7 @@ class UiTestExtension<P : Page<P>>(initializer: (thisRef: UiTestExtension<*>) ->
     /**
      * テスト時に権限を付与したいパーミションの一覧。
      */
-    val permissionsForTesting = mutableListOf(Manifest.permission.DUMP, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    private val permissionsForTesting = listOf(Manifest.permission.DUMP, Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
     /**
      * テスト時に権限の付与をリクエストするパーミッションを返します。AndroidManifestにuses-permissionの指定があるものだけリクエストします。
