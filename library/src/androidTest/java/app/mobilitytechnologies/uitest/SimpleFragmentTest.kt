@@ -17,7 +17,6 @@ class SimpleFragmentTest {
     @RegisterExtension
     val uiTestExtension = UiTestExtension { SimpleFragmentPage(it, TestFragment::class) }
 
-
     @Test
     fun captureTestFragment() {
         uiTestExtension.page.launchFragmentSimply()
