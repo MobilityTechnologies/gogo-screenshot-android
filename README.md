@@ -64,7 +64,7 @@ GOGO Screenshot Testの特徴は以下の通りです。
       }
   }
   ```
-  - ★1 **(任意)** `onCreate()`メソッド内に処理を書きます。`UiTestRunListener.appendListenerArgument(arguments)`の戻り値を`super.onCreate()`の引数に渡してください
+  - ★1 **(任意)** `onCreate()`メソッド内に処理を書きます。ステータスバーの内容を固定化したい場合に、`UiTestRunListener.appendListenerArgument(arguments)`の戻り値を`super.onCreate()`の引数に渡してください
   - ★2: **(任意)** `onStart()`メソッド内に処理を書きます。`SnapShotOptions`を使って起動オプションを変更したい場合に、`super.onStart()`の直前に書いてください。
     指定できる内容は後述します。
   - ★3: **(任意)** `finish()`メソッド内に処理を書きます。保存したスクリーンショット画像をzipファイルにまとめたい場合に、`super.finish()`の直前に書いてください
@@ -76,7 +76,7 @@ GOGO Screenshot Testの特徴は以下の通りです。
   }
   ```
 
-★1は、 ステータスバーの内容を固定化するためにシステムUIデモモードをテスト中だけ有効化するために必要な設定です。システムUIデモモードを有効化すると、スクリーンショットにステータスバーが含まれる場合も、差分の少ないスクリーンショットが取得できます。
+★1では、[システムUIデモモード](https://android.googlesource.com/platform/frameworks/base/+/master/packages/SystemUI/docs/demo_mode.md)をテストの間だけ有効化します。システムUIデモモードを有効化すると、ステータスバーが含まれるスクリーンショットを取得する場合でも、差分の少なくすることができます。
 ★1を設定する場合は、あわせてテスト時のビルドで使用されるAndroidManifest.xml(例: `debug/AndroidManifest.xml`)に、`android.permission.DUMP`のパーミッションを設定してください。
 
 ```xml
@@ -372,9 +372,9 @@ uiTestExtension.page.captureDisplay("画面の状態", "補足の説明")
 
 撮影したスクリーンショットはデフォルトで次のパスに保存されます。
 
-補足の説明がない場合: `/ルートディレクトリ/screenshots/画面のクラス名/画面の状態-スクリーンショット取得順を表す番号.PNG`
+補足の説明がない場合: `/sdcard/Android/data/${applicationId}/files/Pictures/screenshots/画面のクラス名/画面の状態-スクリーンショット取得順を表す番号.PNG`
 
-補足の説明がある場合: `/ルートディレクトリ/screenshots/画面のクラス名/画面の状態-スクリーンショット取得順を表す番号-補足の説明.PNG`
+補足の説明がある場合: `/sdcard/Android/data/${applicationId}/files/Pictures/screenshots/画面のクラス名/画面の状態-スクリーンショット取得順を表す番号-補足の説明.PNG`
 
 パスを構成する要素の詳細は次のとおりです。
 
