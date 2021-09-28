@@ -18,7 +18,7 @@ GOGO Screenshot Testの特徴は以下の通りです。
 
 [JitPack](https://jitpack.io/#MobilityTechnologies/gogo-screenshot-android)を使っています。
 
-- トップレベルの`build.gradle`にJitPackリポジトリを登録します  
+1. トップレベルの`build.gradle`にJitPackリポジトリを登録します  
   ```groovy
   allprojects {
       repositories {
@@ -27,7 +27,7 @@ GOGO Screenshot Testの特徴は以下の通りです。
       }
   }
   ```
-- `app/build.gradle`に依存関係を追加します。  
+2. `app/build.gradle`に依存関係を追加します。  
     ※前述の`AppCompatFragmentScenario`にて利用する`Activity`のデフォルト実装`FragmentTestingActivity`を内部に含んでいます。そのため、`androidTestImplementation`ではなく`debugImplementation`として追加してください  
     ```groovy
     dependencies {
@@ -35,11 +35,12 @@ GOGO Screenshot Testの特徴は以下の通りです。
         ...
     }
     ```
-- AndroidのInstrumented TestでJUnit5を利用可能とするために[android-junit5](https://github.com/mannodermaus/android-junit5) Gradle Pluginをセットアップします。以下のリンク先にある手順を全て実施してください
+3. AndroidのInstrumented TestでJUnit5を利用可能とするために[android-junit5](https://github.com/mannodermaus/android-junit5) Gradle Pluginをセットアップします。以下のリンク先にある手順を全て実施してください
   - [Download](https://github.com/mannodermaus/android-junit5#download)
   - [Setup](https://github.com/mannodermaus/android-junit5#setup)
   - [Instrumentation Test Support](https://github.com/mannodermaus/android-junit5#instrumentation-test-support)
-- スクリーンショットを保存したい場合、`AndroidJUnitRunner`のサブクラスを定義します。
+
+4. **(任意)** スクリーンショットを保存したい場合、`AndroidJUnitRunner`のサブクラスを定義します。
   定義したクラスは`app/src/androidTest/`配下に保存してください。
   ```kotlin
   class MyAndroidJUnitRunner : AndroidJUnitRunner() {
@@ -68,7 +69,18 @@ GOGO Screenshot Testの特徴は以下の通りです。
   - ★2: **(任意)** `onStart()`メソッド内に処理を書きます。`SnapShotOptions`を使って起動オプションを変更したい場合に、`super.onStart()`の直前に書いてください。
     指定できる内容は後述します。
   - ★3: **(任意)** `finish()`メソッド内に処理を書きます。保存したスクリーンショット画像をzipファイルにまとめたい場合に、`super.finish()`の直前に書いてください
-- 定義した`AndroidJUnitRunner`のサブクラス名を、build.gradleの`android.testInstrumentationRunner`に指定します。  
+  - ★1では、[システムUIデモモード](https://android.googlesource.com/platform/frameworks/base/+/master/packages/SystemUI/docs/demo_mode.md)をテストの間だけ有効化します。システムUIデモモードを有効化すると、ステータスバーが含まれるスクリーンショットを取得する場合でも、差分の少なくすることができます。
+★1を設定する場合は、あわせてテスト時のビルドで使用されるAndroidManifest.xml(例: `debug/AndroidManifest.xml`)に、`android.permission.DUMP`のパーミッションを設定してください。
+    ```xml
+        <manifest>
+         ..
+            <uses-permission
+                android:name="android.permission.DUMP"
+                tools:ignore="ProtectedPermissions" />
+        </manifest>
+    ```
+   - 上記すべての設定が不要な場合は、サブクラスの定義をスキップしても問題ありません。
+5. **(任意)** 4で`AndroidJUnitRunner`のサブクラスを定義した場合、サブクラス名をbuild.gradleの`android.testInstrumentationRunner`に指定します。
   ```groovy
   android {
       ...
@@ -76,17 +88,7 @@ GOGO Screenshot Testの特徴は以下の通りです。
   }
   ```
 
-★1では、[システムUIデモモード](https://android.googlesource.com/platform/frameworks/base/+/master/packages/SystemUI/docs/demo_mode.md)をテストの間だけ有効化します。システムUIデモモードを有効化すると、ステータスバーが含まれるスクリーンショットを取得する場合でも、差分の少なくすることができます。
-★1を設定する場合は、あわせてテスト時のビルドで使用されるAndroidManifest.xml(例: `debug/AndroidManifest.xml`)に、`android.permission.DUMP`のパーミッションを設定してください。
 
-```xml
-<manifest>
-     ..
-    <uses-permission
-        android:name="android.permission.DUMP"
-        tools:ignore="ProtectedPermissions" />
-</manifest>
-```
 
 ## テストを書く場所
 
@@ -113,7 +115,7 @@ android {
 }
 ```
 
-また、「セットアップ」で定義した`AndroidJUnitRunner`のサブクラス内(★1の箇所)で、`SnapShotOptions`を使って起動オプションを指定することもできます。
+また、「セットアップ」で定義した`AndroidJUnitRunner`のサブクラス内(★2の箇所)で、`SnapShotOptions`を使って起動オプションを指定することもできます。
 その場合に指定できるオプションは次の通りです。指定方法は前述の★1のコード例を参照してください。
 
 | プロパティ名 | 型 | デフォルト値 | 意味 |
