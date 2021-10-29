@@ -16,7 +16,9 @@
 
 package app.mobilitytechnologies.uitest.snapshot
 
+import android.app.Application
 import android.os.Environment
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
 import app.mobilitytechnologies.uitest.snapshot.SnapShotOptions.Companion.DEFAULT_SETTINGS
 import app.mobilitytechnologies.uitest.snapshot.SnapShotOptions.Companion.INSTRUMENTATION_ARGS_KEY_ENCODE_FILE_NAME
@@ -44,11 +46,10 @@ import java.io.File
 data class SnapShotOptions(
         /**
          * スクリーンショットを保存するディレクトリのルートを指定します。
-         * デフォルト値は `/sdcard/{アプリケーションID}/` です。
+         * デフォルト値は `Context#getExternalFilesDir(Environment.DIRECTORY_PICTURES)` です。
          */
-        @Suppress("DEPRECATION")
-        val rootDirectory: File = File(Environment.getExternalStorageDirectory(),
-                InstrumentationRegistry.getInstrumentation().targetContext.packageName),
+        val rootDirectory: File = ApplicationProvider.getApplicationContext<Application>().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                ?: throw IllegalStateException("getExternalFilesDir returned null. Please consider changing default SnapShotOptions#rootDirectory."),
         /**
          * スクリーンショットのファイル名のうち、日本語が指定できる部分のBase64エンコード要否を指定します。
          * trueを指定するとBase64エンコードされます。falseにするとBase64エンコードされません。

@@ -16,39 +16,38 @@
 
 package app.mobilitytechnologies.uitest
 
-import androidx.test.platform.app.InstrumentationRegistry
+import android.Manifest
+import android.content.pm.PackageManager
+import android.util.Log
+import androidx.core.content.ContextCompat
+import androidx.test.core.app.ApplicationProvider
 import app.mobilitytechnologies.uitest.snapshot.SystemUiDemoMode
 import app.mobilitytechnologies.uitest.utils.awaitExecuteShellCommand
 
 // UIテスト用のadbや開発者optionを用いた設定をInstrumentationテストのライフサイクルにあわせて実行する
 object UiTestDeveloperSettings {
 
-    private val packageName = InstrumentationRegistry.getInstrumentation().targetContext.packageName
     private val systemUiDemoMode = SystemUiDemoMode()
+
+    private const val TAG: String = "$logTagPrefix UiTestDeveloperSettings"
 
     // テスト実行開始の直前のタイミングに実行する
     fun onTestRunStarted() {
-        // ステータスバーの内容を固定化するためにシステムUIデモモードを有効化する
-        // https://android.googlesource.com/platform/frameworks/base/+/master/packages/SystemUI/docs/demo_mode.md
-        awaitExecuteShellCommand("settings put global sysui_demo_allowed 1")
-        systemUiDemoMode.display()
 
-        // Android11以上で/sdcard配下にスクリーンショット画像を保存できるようにMANAGE_EXTERNAL_STORAGE権限を付与する
-        // https://developer.android.com/training/data-storage/manage-all-files#enable-manage-external-storage-for-testing
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
-            awaitExecuteShellCommand("appops set --uid $packageName MANAGE_EXTERNAL_STORAGE allow")
+        val checkDumpPermissionResult = ContextCompat.checkSelfPermission(ApplicationProvider.getApplicationContext(), Manifest.permission.DUMP)
+
+        if (checkDumpPermissionResult == PackageManager.PERMISSION_GRANTED) {
+            // ステータスバーの内容を固定化するためにシステムUIデモモードを有効化する
+            // https://android.googlesource.com/platform/frameworks/base/+/master/packages/SystemUI/docs/demo_mode.md
+            awaitExecuteShellCommand("settings put global sysui_demo_allowed 1")
+            systemUiDemoMode.display()
+        } else {
+            Log.e(TAG, "Manifest.permission.DUMP is not granted. Please add uses-permission tag to your AndroidManifest.xml for testing.")
         }
     }
 
     // テスト実行終了の直後に実行する
     fun onTestRunFinished() {
         systemUiDemoMode.clear()
-    }
-
-    // Instrumentation$finishのあとに実行する
-    fun onInstrumentationFinished() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
-            awaitExecuteShellCommand("appops set --uid $packageName MANAGE_EXTERNAL_STORAGE deny")
-        }
     }
 }
