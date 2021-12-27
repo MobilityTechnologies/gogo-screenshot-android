@@ -31,7 +31,7 @@ GOGO Screenshot Testの特徴は以下の通りです。
     ※前述の`AppCompatFragmentScenario`にて利用する`Activity`のデフォルト実装`FragmentTestingActivity`を内部に含んでいます。そのため、`androidTestImplementation`ではなく`debugImplementation`として追加してください  
     ```groovy
     dependencies {
-        debugImplementation 'com.github.MobilityTechnologies:gogo-screenshot-android:0.0.1'
+        debugImplementation 'com.github.MobilityTechnologies:gogo-screenshot-android:0.0.2'
         ...
     }
     ```
@@ -535,9 +535,8 @@ limitations under the License.
 ### Third Party Content
 
 - `DataBindingIdlingResource.kt` is modified version of [Android Architecture Blueprints v2](https://github.com/android/architecture-components-samples/blob/1d7a759f742e8bdaf1eb4531e38ea9270301c577/GithubBrowserSample/app/src/androidTest/java/com/android/example/github/util/DataBindingIdlingResource.kt) and [GithubBrowserSample](https://github.com/android/architecture-components-samples/blob/1d7a759f742e8bdaf1eb4531e38ea9270301c577/GithubBrowserSample/app/src/androidTest/java/com/android/example/github/util/DataBindingIdlingResource.kt) licensed under the Apache License, Version 2.0.
-- `TranslatedCoordinatesProvider.kt` is a modified version of [TranslatedCoordinatesProvider.java](https://github.com/android/android-test/blob/androidx-test-1.3.0/espresso/core/java/androidx/test/espresso/action/TranslatedCoordinatesProvider.java) licensed under the Apache License, Version 2.0.
+- `TranslatedCoordinatesProvider.kt` is a modified version of [TranslatedCoordinatesProvider.java](https://github.com/android/android-test/blob/androidx-test-1.4.0/espresso/core/java/androidx/test/espresso/action/TranslatedCoordinatesProvider.java) licensed under the Apache License, Version 2.0.
 - `CountingTaskExecutorExtension.kt` is a modified version of [CountingTaskExecutorRule.java](https://dl.google.com/dl/android/maven2/androidx/arch/core/core-testing/2.1.0/core-testing-2.1.0-sources.jar) licensed under the Apache License, Version 2.0.
-- `GrantPermissionExtension.kt` is a modified version of [GrantPermissionRule.java](https://github.com/android/android-test/blob/androidx-test-1.3.0/runner/rules/java/androidx/test/rule/GrantPermissionRule.java) licensed under the Apache License, Version 2.0.
+- `GrantPermissionExtension.kt` is a modified version of [GrantPermissionRule.java](https://github.com/android/android-test/blob/androidx-test-1.4.0/runner/rules/java/androidx/test/rule/GrantPermissionRule.java) licensed under the Apache License, Version 2.0.
 - `TaskExecutorWithIdlingResourceExtension.kt` is copied from [GithubBrowserSample](https://github.com/android/architecture-components-samples/blob/1d7a759f742e8bdaf1eb4531e38ea9270301c577/GithubBrowserSample/app/src/androidTest/java/com/android/example/github/util/TaskExecutorWithIdlingResourceRule.kt) licensed under the Apache License, Version 2.0.
-- `AppCompatFragmentScenario.kt`, `FragmentFactoryHolderViewModel.kt` and `FragmentTestingActivity.kt` are modified versions of [FragmentScenario.java](https://dl.google.com/dl/android/maven2/androidx/fragment/fragment-testing/1.2.5/fragment-testing-1.2.5-sources.jar) licensed under the Apache License, Version 2.0.
-- `isBelowBottomLine()`, `findView()` and `getTopViewGroup()` defined in `ViewAssertions.kt` are modified versions of [PositionAssertions.java](https://github.com/android/android-test/blob/androidx-test-1.3.0/espresso/core/java/androidx/test/espresso/assertion/PositionAssertions.java) licensed under the Apache License, Version 2.0.
+- `isBelowBottomLine()`, `findView()` and `getTopViewGroup()` defined in `ViewAssertions.kt` are modified versions of [PositionAssertions.java](https://github.com/android/android-test/blob/androidx-test-1.4.0/espresso/core/java/androidx/test/espresso/assertion/PositionAssertions.java) licensed under the Apache License, Version 2.0.
