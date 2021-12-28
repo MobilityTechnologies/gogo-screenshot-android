@@ -1,7 +1,7 @@
 buildscript {
     ext {
-        agpVersion = "4.1.2"
-        kotlinVersion = "1.4.21-2"
+        agpVersion = "7.0.2"
+        kotlinVersion = "1.5.31"
         androidJunit5PluginVersion = "1.8.0.0"
     }
 

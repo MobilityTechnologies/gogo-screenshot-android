@@ -41,10 +41,10 @@ dependencies {
     def androidxTestVersion = '1.4.0'
     def uiautomatorVersion = '2.2.0'
     def espressoVersion = '3.4.0'
-    def navigationVersion = '2.3.3'
+    def navigationVersion = '2.3.5'
     def guavaAndroidVersion = '28.1-android'
     def junit5Version = '5.7.1'
-    def playServicesMapsVersion = '17.0.0'
+    def playServicesMapsVersion = '18.0.1'
     def androidJunit5Version = '1.2.2'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
