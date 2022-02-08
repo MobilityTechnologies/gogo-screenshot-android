@@ -104,12 +104,15 @@ interface ActivityOrFragmentSnapShotTaker<A : AppCompatActivity, F : Fragment> {
          * ここで指定された回数スクロールしても、ScrollViewの下端が[bottomViewId]の下端と同じか下に位置しない場合は例外が発生します。
          * @param waitInitialScrollBarFadeAway スクロール開始前に [ensureInitialScrollBarFadedAway] を呼び出すかどうかを指定します。
          * ある画面(ActivityやFragment)で複数回このメソッドを呼ぶ場合、2回目以降は`false`を指定すると、テスト実行時間の速度向上が期待できます。
+         * @param optionalDescription その他、結果レポートに表示させたい補足事項があれば、それを指定します。
+         *   `null`以外が指定された場合は結果レポートに表示されます。
          */
         fun captureEachScrolling(
                 @IdRes scrollViewId: Int,
                 @IdRes bottomViewId: Int,
                 maxAttempts: Int = 5,
-                waitInitialScrollBarFadeAway: Boolean = true
+                waitInitialScrollBarFadeAway: Boolean = true,
+                optionalDescription: String? = null
         ) {
             if (waitInitialScrollBarFadeAway) {
                 snapShotTaker.ensureInitialScrollBarFadedAway(scrollViewId)
@@ -118,12 +121,14 @@ interface ActivityOrFragmentSnapShotTaker<A : AppCompatActivity, F : Fragment> {
                     .perform(
                             disableVerticalScrollBar(),
                             repeatedlyUntil(
-                                    scrollVertically().doFirst { captureDisplay(waitUntilIdle = false) },
+                                    scrollVertically().doFirst {
+                                        captureDisplay(optionalDescription = optionalDescription, waitUntilIdle = false)
+                                    },
                                     withViewAssertion(isBelowBottomLine(withId(bottomViewId))), maxAttempts))
             // 端までスクロールしたときの反動の影がスクショに映りこんでしまうので500ms待つ。
             // 固定値スリープは望ましくないが、他に良い方法が思い付かないので、一旦これで凌ぐ。
             SystemClock.sleep(500)
-            captureDisplay()
+            captureDisplay(optionalDescription = optionalDescription)
         }
     }
 }
