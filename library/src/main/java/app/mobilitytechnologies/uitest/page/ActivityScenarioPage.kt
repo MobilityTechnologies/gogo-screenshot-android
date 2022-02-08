@@ -131,7 +131,9 @@ abstract class ActivityScenarioPage<IMPL, A : AppCompatActivity>(
      * @param intent 目的のFragmentの親Activityを起動するのに必要なIntentを指定します。
      * @param navigateAction 目的のFragmentを起動するために必要な処理を指定します。`null`が指定されている場合は何もしません。
      */
-    open fun launchFragmentByNavController(@IdRes fragmentDestination: Int, intent: Intent? = null, navigateAction: ((NavController) -> Unit)? = null) {
+    open fun launchFragmentByNavController(@IdRes fragmentDestination: Int,
+                                           intent: Intent? = null,
+                                           navigateAction: ((NavController) -> Unit)? = null) {
         checkNotNull(viewIdSearchingNavController)
         // Fragment名を取る方法がわからないので、destination IDから画面名を生成する
         if (snapShotPageName == null) {
