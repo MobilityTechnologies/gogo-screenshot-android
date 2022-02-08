@@ -120,7 +120,7 @@ abstract class DialogFragmentPage<IMPL, D : DialogFragment, DH : DialogHostingFr
      *   `null`以外が指定された場合は結果レポートに表示されます。
      * @param waitUntilIdle キャプチャする前にアイドル状態になるまで待つ場合には`true`を、そうでない場合は`false`を指定します。
      */
-    fun captureDialogFragment(condition: String, optionalDescription: String? = null, waitUntilIdle: Boolean = true) {
+    open fun captureDialogFragment(condition: String, optionalDescription: String? = null, waitUntilIdle: Boolean = true) {
         if (waitUntilIdle) {
             Espresso.onIdle()
         }

@@ -227,7 +227,7 @@ abstract class FragmentScenarioPage<IMPL, F : Fragment, HA>(
      * @param waitUntilIdle キャプチャする前にアイドル状態になるまで待つ場合には`true`を、そうでない場合は`false`を指定します。
      * @param func キャプチャ対象を返す関数を指定します。この関数の引数には、画面に表示されているFragmentが渡されます。
      */
-    fun captureView(condition: String, optionalDescription: String?, waitUntilIdle: Boolean, func: (F) -> View) {
+    open fun captureView(condition: String, optionalDescription: String?, waitUntilIdle: Boolean, func: (F) -> View) {
         captureViewFromActivityOrFragment(condition, optionalDescription, waitUntilIdle) {
             when (it) {
                 is ActivityOrFragment.Fragment -> func(it.fragment)
