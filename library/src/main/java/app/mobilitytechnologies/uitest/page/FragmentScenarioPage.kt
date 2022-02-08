@@ -75,7 +75,7 @@ abstract class FragmentScenarioPage<IMPL, F : Fragment, HA>(
      * @param factory 起動するFragmentを生成するためのファクトリーを指定します。
      *   [AppCompatFragmentScenario.launchInContainer]の引数にそのまま渡されます。
      */
-    fun launchFragmentSimply(fragmentArgs: Bundle? = null, factory: FragmentFactory? = null) {
+    open fun launchFragmentSimply(fragmentArgs: Bundle? = null, factory: FragmentFactory? = null) {
         if (snapShotPageName == null) {
             snapShotPageName = fragmentClass.java.simpleName
         }
@@ -88,7 +88,7 @@ abstract class FragmentScenarioPage<IMPL, F : Fragment, HA>(
      *
      * @param fragmentCreator 起動したいFragmentをインスタンス化する処理が書かれたλ式を指定します。
      */
-    fun launchFragmentByCreator(fragmentCreator: () -> F) {
+    open fun launchFragmentByCreator(fragmentCreator: () -> F) {
         launchFragmentSimply(factory = object : FragmentFactory() {
             override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
                 return if (className == fragmentClass.java.name) {
@@ -130,7 +130,7 @@ abstract class FragmentScenarioPage<IMPL, F : Fragment, HA>(
      * @param navigateAction 目的の子Fragmentを起動するためにNavControllerに対して何らかの操作が必要な場合、その操作内容を指定します。
      *   `null`が指定された場合は何もしません。
      */
-    fun launchChildFragmentByNavController(@IdRes fragmentDestination: Int,
+    open fun launchChildFragmentByNavController(@IdRes fragmentDestination: Int,
                                            fragmentArgs: Bundle? = null,
                                            factory: FragmentFactory? = null,
                                            navigateAction: ((NavController) -> Unit)? = null) {
@@ -227,7 +227,7 @@ abstract class FragmentScenarioPage<IMPL, F : Fragment, HA>(
      * @param waitUntilIdle キャプチャする前にアイドル状態になるまで待つ場合には`true`を、そうでない場合は`false`を指定します。
      * @param func キャプチャ対象を返す関数を指定します。この関数の引数には、画面に表示されているFragmentが渡されます。
      */
-    fun captureView(condition: String, optionalDescription: String?, waitUntilIdle: Boolean, func: (F) -> View) {
+    open fun captureView(condition: String, optionalDescription: String?, waitUntilIdle: Boolean, func: (F) -> View) {
         captureViewFromActivityOrFragment(condition, optionalDescription, waitUntilIdle) {
             when (it) {
                 is ActivityOrFragment.Fragment -> func(it.fragment)

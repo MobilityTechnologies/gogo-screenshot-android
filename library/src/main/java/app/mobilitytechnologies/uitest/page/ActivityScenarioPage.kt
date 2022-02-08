@@ -60,7 +60,7 @@ abstract class ActivityScenarioPage<IMPL, A : AppCompatActivity>(
      *
      * @param intent [activityClass]を起動するのに必要なIntentを指定します。
      */
-    fun launchActivitySimply(intent: Intent? = null) {
+    open fun launchActivitySimply(intent: Intent? = null) {
         if (snapShotPageName == null) {
             snapShotPageName = activityClass.java.simpleName
         }
@@ -131,7 +131,9 @@ abstract class ActivityScenarioPage<IMPL, A : AppCompatActivity>(
      * @param intent 目的のFragmentの親Activityを起動するのに必要なIntentを指定します。
      * @param navigateAction 目的のFragmentを起動するために必要な処理を指定します。`null`が指定されている場合は何もしません。
      */
-    fun launchFragmentByNavController(@IdRes fragmentDestination: Int, intent: Intent? = null, navigateAction: ((NavController) -> Unit)? = null) {
+    open fun launchFragmentByNavController(@IdRes fragmentDestination: Int,
+                                           intent: Intent? = null,
+                                           navigateAction: ((NavController) -> Unit)? = null) {
         checkNotNull(viewIdSearchingNavController)
         // Fragment名を取る方法がわからないので、destination IDから画面名を生成する
         if (snapShotPageName == null) {
@@ -177,7 +179,7 @@ abstract class ActivityScenarioPage<IMPL, A : AppCompatActivity>(
      * @param waitUntilIdle キャプチャする前にアイドル状態になるまで待つ場合には`true`を、そうでない場合は`false`を指定します。
      * @param func キャプチャ対象を返す関数を指定します。この関数の引数には、画面に表示されているActivityが渡されます。
      */
-    fun captureView(condition: String, optionalDescription: String?, waitUntilIdle: Boolean, func: (A) -> View) {
+    open fun captureView(condition: String, optionalDescription: String?, waitUntilIdle: Boolean, func: (A) -> View) {
         captureViewFromActivityOrFragment(condition, optionalDescription, waitUntilIdle) {
             when (it) {
                 is ActivityOrFragment.Activity -> func(it.activity)
