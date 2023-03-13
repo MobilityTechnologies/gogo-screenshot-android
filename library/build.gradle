@@ -73,7 +73,8 @@ afterEvaluate {
             release(MavenPublication) {
                 from components.release
 
-                // group と version は jitpack が自動的に付けてくれる
+                // -Pversion=xxxxx を実行時に渡して、publishするバージョンを指定してください。
+                group = 'com.github.MobilityTechnologies'
                 artifactId = 'gogo-screenshot-android'
                 pom {
                     name = 'GOGO Screenshot Test for Android'
@@ -97,6 +98,16 @@ afterEvaluate {
                         developerConnection = 'scm:git://github.com/MobilityTechnologies/gogo-screenshot-android.git'
                         url = 'git://github.com/MobilityTechnologies/gogo-screenshot-android.git'
                     }
+                }
+            }
+        }
+        repositories {
+            maven {
+                name = 'GitHubPackages'
+                url "https://maven.pkg.github.com/MobilityTechnologies/gogo-screenshot-android"
+                credentials {
+                    username = System.getenv("GITHUB_ACTOR")
+                    password = System.getenv("GITHUB_TOKEN")
                 }
             }
         }

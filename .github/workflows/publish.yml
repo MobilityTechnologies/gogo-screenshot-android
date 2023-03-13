@@ -1,0 +1,39 @@
+name: Publish package to GitHub Packages
+on:
+  push:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'publishするバージョン (デフォルトでブランチ名のSNAPSHOTとcommit idが作られます)'
+        required: false
+        type: string
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+      - name: publish-explicit-version
+        if: github.event.inputs.version != ''
+        run: |
+          ./gradlew -Pversion=$PUBLISH_VERSION build publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PUBLISH_VERSION: ${{ github.event.inputs.version }}
+      - name: publish-snapshots
+        if: github.event.inputs.version == ''
+        run: |
+          VERSION_COMMIT_SHA=$(git rev-parse --short @)
+          BRANCH=$(git rev-parse --abbrev-ref @)
+          VERSION_BRANCH=${BRANCH////\~}-SNAPSHOT
+          ./gradlew -Pversion=$VERSION_COMMIT_SHA build publish
+          ./gradlew -Pversion=$VERSION_BRANCH publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
